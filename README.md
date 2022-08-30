@@ -43,7 +43,6 @@
 </div>
     </br>
   <div align="center">
-    <img src="https://raw.githubusercontent.com/hoangvu12/hoangvu12/master/profile.svg" width="400" height="400">
 </div>
 <hr>
 </div>
