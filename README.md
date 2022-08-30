@@ -23,7 +23,7 @@
 
 <div>
 <img src="https://media2.giphy.com/media/7hW7hXXri33NK/giphy.gif" align="right">
-<h2 align="center">Knowledge ᕦ(ò_óˇ)ᕤ</h2>
+<h2 align="center">Kiến Thức ᕦ(ò_óˇ)ᕤ</h2>
 <p>
 </div>
 <div>
