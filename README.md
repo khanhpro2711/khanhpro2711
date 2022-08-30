@@ -43,6 +43,7 @@
 </div>
     </br>
   <div align="center">
+      <img src="(https://raw.githubusercontent.com/khanhpro2711/tuankhanh2711/2bf2e8dc5a4d6b66935a2a06faabca3958e09687/profile.svg)" width="400" height="400">
 </div>
 <hr>
 </div>
