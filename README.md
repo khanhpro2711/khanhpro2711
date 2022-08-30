@@ -1,6 +1,9 @@
 <body>
+ </br>
+  <div align="center">
+      <img src="https://github.com/khanhpro2711/tuankhanh2711/blob/main/nguyentuankhanh.jpg?raw=true" width="400" height="400">
+</div>
 <h1 align="center">Welcome (づ｡◕‿‿◕｡)づ</h1>
-
 <br>
 <div align="center">
 <img src="https://media4.giphy.com/media/a6pzK009rlCak/giphy.gif">
