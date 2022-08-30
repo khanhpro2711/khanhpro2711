@@ -1,7 +1,7 @@
 <body>
  </br>
   <div align="center">
-      <img src="(https://github.com/khanhpro2711/khanhpro2711/blob/main/Ishida.jpg?raw=true)"
+      <img src="https://github.com/khanhpro2711/khanhpro2711/blob/main/Ishida.jpg?raw=true">
 </div>
 <h1 align="center">Welcome (づ｡◕‿‿◕｡)づ</h1>
 <br>
