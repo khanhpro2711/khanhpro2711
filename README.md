@@ -1,8 +1,4 @@
 <body>
- </br>
-  <div align="center">
-      <img src="https://github.com/khanhpro2711/khanhpro2711/blob/main/Ishida.jpg?raw=true">
-</div>
 <h1 align="center">Welcome (づ｡◕‿‿◕｡)づ</h1>
 <br>
 <div align="center">
@@ -49,6 +45,10 @@
       <img src="https://raw.githubusercontent.com/khanhpro2711/tuankhanh2711/e2053befd3cea683e347c3bb838812656686ccf2/profile.svg" width="400" height="400">
 </div>
 <hr>
+ </br>
+  <div align="center">
+      <img src="https://github.com/khanhpro2711/khanhpro2711/blob/main/Ishida.jpg?raw=true">
+</div>
 </div>
 </div>
 </body>
