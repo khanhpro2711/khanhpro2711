@@ -32,7 +32,7 @@
 <br>
 <h2 align="center">Contact me (>人<)</h2>
 <br>
-<p align="center"><a href="https://www.facebook.com/khanhpro2711xx" target="_blank"><img src="https://img.shields.io/badge/Facebook%20-%231DA1F2.svg?&style=for-the-badge&logo=Facebook&logoColor=white"/></a> <a href="https://discord.com" target="_blank"><img src="https://img.shields.io/badge/VuNguyen%235055%20-%237289DA.svg?&style=for-the-badge&logo=discord&logoColor=white"/></a></p>
+<p align="center"><a href="https://www.facebook.com/khanhpro2711xx" target="_blank"><img src="https://img.shields.io/badge/Facebook%20-%231DA1F2.svg?&style=for-the-badge&logo=Facebook&logoColor=white"/></a> <a href="https://discord.com" target="_blank"><img src="https://img.shields.io/badge/Nguyen TuanKhanh%235055%20-%237289DA.svg?&style=for-the-badge&logo=discord&logoColor=white"/></a></p>
 </div>
 <br>
 <div>
