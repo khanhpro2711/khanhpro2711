@@ -1,55 +1,91 @@
-<body>
-<h1 align="center">Welcome (づ｡◕‿‿◕｡)づ</h1>
-<br>
-<div align="center">
-<img src="https://media4.giphy.com/media/a6pzK009rlCak/giphy.gif">
-</div>
-<br>
-<div>
-<h2 align="center">About me (~˘▾˘)~</h2>
-<li>
-<b>Name:</b> Nguyen Tuan Khanh </li>
-<li>
-<b>Hobbies:</b> Gaming, Coding, anime
-</li>
-<li>
-<b>Sex:</b> Male 
-</li>
-<li>
-<b>Loves:</b> Web/Mobile Development.
-</li>
-<br>
+# Zalo Shopee Cashback Bot MVP
 
-<div>
-<img src="https://media2.giphy.com/media/7hW7hXXri33NK/giphy.gif" align="right">
-<h2 align="center">Kiến Thức ᕦ(ò_óˇ)ᕤ</h2>
-<p>
-</div>
-<div>
-<p align="center"> <img src="https://img.shields.io/badge/html5%20-%23E34F26.svg?&style=for-the-badge&logo=html5&logoColor=white"/> <img src="https://img.shields.io/badge/css3%20-%231572B6.svg?&style=for-the-badge&logo=css3&logoColor=white"/> <img src="https://img.shields.io/badge/vue%20-%2343853D.svg?&style=for-the-badge&logo=vue&logoColor=white"/><br>
- <img src="https://img.shields.io/badge/node.js%20-%2343853D.svg?&style=for-the-badge&logo=node.js&logoColor=white"/> <img src="https://img.shields.io/badge/javascript%20-%23323330.svg?&style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/> <img src="https://img.shields.io/badge/React%20-%231572B6.svg?&style=for-the-badge&logo=react&logoColor=white"/><br><br>
-</p>
-<br>
-<h2 align="center">Contact me (>人<)</h2>
-<br>
-<p align="center"><a href="https://www.facebook.com/tuankhanhdev" target="_blank"><img src="https://img.shields.io/badge/Facebook%20-%231DA1F2.svg?&style=for-the-badge&logo=Facebook&logoColor=white"/></a> <a href="https://discord.com" target="_blank"><img src="https://img.shields.io/badge/Nguyen TuanKhanh%235055%20-%237289DA.svg?&style=for-the-badge&logo=discord&logoColor=white"/></a></p>
-</div>
-<br>
-<div>
-<h2 align="center">Thanks for reading (ღ˘⌣˘ღ)</h2>
-<div align="center">
-<img src="https://media.giphy.com/media/rPQaG7o8uqMzS/giphy.gif">
-</div>
-    </br>
-  <div align="center">
-      <img src="https://raw.githubusercontent.com/khanhpro2711/tuankhanh2711/e2053befd3cea683e347c3bb838812656686ccf2/profile.svg" width="400" height="400">
-</div>
-<hr>
- </br>
-  <div align="center">
-      <img src="https://github.com/khanhpro2711/khanhpro2711/blob/main/Ishida.jpg?raw=true">
-</div>
-</div>
-</div>
-</body>
-``
+MVP này biến repo thành nền tảng bot Zalo cho cộng đồng cashback Shopee Affiliate. Bot hỗ trợ cả chat riêng và nhóm Zalo, tạo link Shopee có tracking riêng, lưu đơn hàng, tính cashback theo hoa hồng thực nhận, và cung cấp admin dashboard tối giản để vận hành giai đoạn đầu.
+
+## Phạm vi MVP
+
+- Nhận webhook tin nhắn từ Zalo Bot Platform tại `POST /webhooks/zalo`.
+- Tự động phát hiện link `shopee.vn`, `s.shopee.vn`, hoặc `shp.ee` trong chat riêng/nhóm.
+- Sinh mã tracking theo user và group để đối soát cashback.
+- Tạo affiliate URL có `af_id` và `sub_id` từ tracking code.
+- Command `/cashback` để người dùng xem số dư.
+- Command `/rut 50000 momo 09xxxxxxxx` hoặc `/rut 50000 bank VCB 0123456789 NGUYEN VAN A` để tạo yêu cầu rút tiền.
+- Admin dashboard tại `/` để xem metric, đơn hàng, yêu cầu rút tiền và import order JSON từ Shopee Affiliate report.
+
+## Cấu hình môi trường
+
+Sao chép `.env.example` thành `.env` và cập nhật giá trị thật:
+
+```bash
+cp .env.example .env
+```
+
+Các biến quan trọng:
+
+- `ZALO_BOT_TOKEN`: token bot Zalo dùng để gửi tin nhắn.
+- `ZALO_WEBHOOK_SECRET`: secret để verify header `X-Bot-Api-Secret-Token` từ Zalo.
+- `SHOPEE_AFFILIATE_ID`: affiliate ID từ tài khoản Shopee Affiliate của bạn.
+- `SHOPEE_DEFAULT_CASHBACK_RATE`: tỷ lệ chia lại hoa hồng cho user, mặc định `0.7` tức 70%.
+- `ADMIN_API_KEY`: key để admin dashboard gọi API.
+- `DATA_DIR`: thư mục chứa JSON store, mặc định `./data`.
+
+## Chạy local
+
+```bash
+npm run dev
+```
+
+Health check:
+
+```bash
+curl http://localhost:3000/health
+```
+
+Mở admin dashboard:
+
+```text
+http://localhost:3000/
+```
+
+## Webhook Zalo
+
+Đăng ký webhook production trỏ về endpoint HTTPS:
+
+```text
+https://your-domain.example/webhooks/zalo
+```
+
+Server sẽ từ chối request nếu `ZALO_WEBHOOK_SECRET` được cấu hình nhưng header `X-Bot-Api-Secret-Token` không khớp.
+
+## Import đơn hàng Shopee Affiliate
+
+Trong dashboard, dán JSON theo format:
+
+```json
+{
+  "orders": [
+    {
+      "trackingId": "zu123_g456_labcxyz",
+      "shopeeOrderId": "250101ABC",
+      "orderAmount": 250000,
+      "commissionAmount": 10000,
+      "status": "approved",
+      "orderedAt": "2026-06-14T08:00:00.000Z"
+    }
+  ]
+}
+```
+
+Cashback được tính bằng:
+
+```text
+cashbackAmount = floor(commissionAmount * cashbackShareRate)
+```
+
+## Roadmap sau MVP
+
+1. Tích hợp trực tiếp API Shopee Affiliate để tạo deeplink/shortlink và sync conversion report tự động.
+2. Thêm database PostgreSQL thay cho JSON store.
+3. Thêm đăng nhập admin, phân quyền group owner và audit log.
+4. Thêm duyệt/đánh dấu đã thanh toán withdrawal trên dashboard.
+5. Thêm chống spam link, hạn mức rút tiền nâng cao và cảnh báo gian lận.
