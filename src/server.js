@@ -34,11 +34,15 @@ async function handleZaloWebhook(req, res) {
   const group = store.upsertGroup({ zaloGroupId: event.groupId, name: event.groupName });
   const lowerText = event.text.trim().toLowerCase();
 
-  if (lowerText.startsWith('/cashback')) {
+  if (['/start', 'start', '/help', 'help'].includes(lowerText)) {
+    await sendZaloMessage(event.replyTarget, welcomeMessage());
+  } else if (lowerText.startsWith('/cashback')) {
     const account = store.userSummary(user.id);
     await sendZaloMessage(event.replyTarget, `💰 Số dư khả dụng: ${formatVnd(account.available)}\n⏳ Đang chờ rút: ${formatVnd(account.locked)}\n✅ Đã thanh toán: ${formatVnd(account.paid)}`);
   } else if (lowerText.startsWith('/rut')) {
     await handleWithdrawCommand(event, user);
+  } else if (lowerText.startsWith('/setbank')) {
+    await handleSetBankCommand(event, user);
   } else {
     const shopeeUrl = extractShopeeUrl(event.text);
     if (shopeeUrl) await handleShopeeLink(event, user, group, shopeeUrl);
@@ -60,16 +64,49 @@ async function handleWithdrawCommand(event, user) {
   const amount = Number(amountText);
   const accountInfo = accountParts.join(' ');
   const account = store.userSummary(user.id);
-  if (!amount || !['bank', 'momo'].includes(method) || !accountInfo) {
-    await sendZaloMessage(event.replyTarget, 'Cú pháp rút tiền: /rut 50000 momo 09xxxxxxxx hoặc /rut 50000 bank VCB 0123456789 NGUYEN VAN A');
+  if (!amount || !['bank', 'momo'].includes(method)) {
+    await sendZaloMessage(event.replyTarget, 'Cú pháp rút tiền: /rut 50000 momo 09xxxxxxxx hoặc /rut 50000 bank VCB 0123456789 NGUYEN VAN A\nBạn cũng có thể lưu sẵn tài khoản bằng /setbank bank VCB 0123456789 NGUYEN VAN A');
+    return;
+  }
+  const savedAccount = user.payoutAccount?.method === method ? user.payoutAccount.accountInfo : null;
+  const finalAccountInfo = accountInfo || savedAccount;
+  if (!finalAccountInfo) {
+    await sendZaloMessage(event.replyTarget, 'Bạn chưa nhập tài khoản nhận tiền. Dùng /setbank bank VCB 0123456789 NGUYEN VAN A hoặc thêm thông tin ngay sau lệnh /rut.');
     return;
   }
   if (amount < store.state.settings.minWithdrawalAmount || amount > account.available) {
     await sendZaloMessage(event.replyTarget, `❌ Số tiền rút tối thiểu ${formatVnd(store.state.settings.minWithdrawalAmount)} và không vượt số dư ${formatVnd(account.available)}.`);
     return;
   }
-  store.requestWithdrawal({ userId: user.id, amount, method, accountInfo });
+  store.requestWithdrawal({ userId: user.id, amount, method, accountInfo: finalAccountInfo });
   await sendZaloMessage(event.replyTarget, `✅ Đã tạo yêu cầu rút ${formatVnd(amount)} qua ${method.toUpperCase()}. Admin sẽ xử lý thủ công trong MVP.`);
+}
+
+async function handleSetBankCommand(event, user) {
+  const [, method, ...accountParts] = event.text.trim().split(/\s+/);
+  const accountInfo = accountParts.join(' ');
+  if (!['bank', 'momo'].includes(method) || !accountInfo) {
+    await sendZaloMessage(event.replyTarget, 'Cú pháp lưu tài khoản: /setbank momo 09xxxxxxxx hoặc /setbank bank VCB 0123456789 NGUYEN VAN A');
+    return;
+  }
+  store.setPayoutAccount({ userId: user.id, method, accountInfo });
+  await sendZaloMessage(event.replyTarget, `✅ Đã lưu tài khoản nhận cashback qua ${method.toUpperCase()}: ${accountInfo}\nKhi đủ số dư, bạn có thể gõ /rut 50000 ${method}.`);
+}
+
+function welcomeMessage() {
+  return [
+    '🤖 Bot cashback Zalo đã sẵn sàng!',
+    '',
+    'Cách dùng siêu nhanh:',
+    '1) Gửi link sản phẩm Shopee vào chat này.',
+    '2) Bot trả link affiliate có mã tracking riêng.',
+    '3) Bạn bấm link để mua, đơn được đối soát từ báo cáo affiliate.',
+    '4) Gõ /cashback để xem số dư.',
+    '5) Gõ /setbank bank VCB 0123456789 NGUYEN VAN A để lưu tài khoản.',
+    '6) Gõ /rut 50000 bank để tạo yêu cầu rút tiền.',
+    '',
+    'MVP hiện hỗ trợ Shopee; có thể mở rộng Lazada/Tiki/TikTok Shop/Taobao khi có API hoặc report affiliate tương ứng.',
+  ].join('\n');
 }
 
 async function handleAdmin(req, res, handler) {

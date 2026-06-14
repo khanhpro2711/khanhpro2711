@@ -91,6 +91,17 @@ export class JsonStore {
     return payload;
   }
 
+  setPayoutAccount({ userId, method, accountInfo }) {
+    const user = this.state.users.find((item) => item.id === userId);
+    if (!user) throw new Error('User not found');
+    user.payoutAccount = {
+      method,
+      accountInfo,
+      updatedAt: new Date().toISOString(),
+    };
+    return user.payoutAccount;
+  }
+
   requestWithdrawal({ userId, amount, method, accountInfo }) {
     const withdrawal = {
       id: crypto.randomUUID(),
