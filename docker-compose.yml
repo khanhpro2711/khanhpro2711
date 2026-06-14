@@ -1,0 +1,15 @@
+services:
+  cashback-bot:
+    build: .
+    container_name: zalo-shopee-cashback-bot
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

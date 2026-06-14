@@ -1,0 +1,16 @@
+[Unit]
+Description=Zalo Shopee Cashback Bot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/zalo-shopee-cashback-bot
+EnvironmentFile=/opt/zalo-shopee-cashback-bot/.env
+ExecStart=/usr/bin/node src/server.js
+Restart=always
+RestartSec=5
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

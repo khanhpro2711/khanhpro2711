@@ -1,0 +1,16 @@
+{
+  "name": "zalo-shopee-cashback-bot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MVP Zalo bot for Shopee affiliate cashback in private chats and groups.",
+  "type": "module",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "NODE_ENV=production node src/server.js",
+    "check": "node --check src/server.js && node --check src/store.js && node --check src/shopee.js && node --check src/zalo.js && node --check src/env.js && node --check public/admin.js",
+    "test": "npm run check && bash scripts/smoke-test.sh"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
