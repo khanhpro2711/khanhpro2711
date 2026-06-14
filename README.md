@@ -8,8 +8,10 @@ MVP này biến repo thành nền tảng bot Zalo cho cộng đồng cashback Sh
 - Tự động phát hiện link `shopee.vn`, `s.shopee.vn`, hoặc `shp.ee` trong chat riêng/nhóm.
 - Sinh mã tracking theo user và group để đối soát cashback.
 - Tạo affiliate URL có `af_id` và `sub_id` từ tracking code.
+- Command `/start` hoặc `/help` để gửi hướng dẫn dùng bot theo flow giống banner cashback: gửi link, nhận link tracking, xem số dư, lưu tài khoản và rút tiền.
 - Command `/cashback` để người dùng xem số dư.
-- Command `/rut 50000 momo 09xxxxxxxx` hoặc `/rut 50000 bank VCB 0123456789 NGUYEN VAN A` để tạo yêu cầu rút tiền.
+- Command `/setbank momo 09xxxxxxxx` hoặc `/setbank bank VCB 0123456789 NGUYEN VAN A` để lưu thông tin nhận cashback.
+- Command `/rut 50000 momo` hoặc `/rut 50000 bank` để rút bằng tài khoản đã lưu; vẫn có thể nhập đủ thông tin ngay trên lệnh `/rut 50000 bank VCB 0123456789 NGUYEN VAN A`.
 - Admin dashboard tại `/` để xem metric, đơn hàng, yêu cầu rút tiền và import order JSON từ Shopee Affiliate report.
 
 ## Cấu hình môi trường
@@ -39,6 +41,14 @@ Health check:
 
 ```bash
 curl http://localhost:3000/health
+```
+
+Test nhanh webhook ở chế độ dry-run, không cần token Zalo:
+
+```bash
+curl -X POST http://localhost:3000/webhooks/zalo \
+  -H 'Content-Type: application/json' \
+  -d '{"message":{"text":"/start","from":{"id":"u1","name":"Demo"},"chat":{"id":"u1","type":"private"}}}'
 ```
 
 Mở admin dashboard:
